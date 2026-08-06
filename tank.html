@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Cyber Commander</title>
+    <link rel="stylesheet" href="tank.css">
+</head>
+<body>
+    <div id="splashPrompt">
+        <p class="pulse">Click to Begin</p>
+    </div>
+    <div class="game-container">
+        <div class="game-header">
+            CYBER COMMANDER - WAVE: <span id="levelCounter">1</span>
+        </div>
+        <div class="game-area">
+            <canvas id="gameCanvas"></canvas>
+            <div class="crosshair"></div>
+            <div class="hit-marker" id="hitMarker"></div>
+            <div id="scoreDisplay">SCORE <span id="score">000000</span></div>
+            <div id="bossBarWrap">ELITE SIGNAL<div class="meter"><span id="bossBar"></span></div></div>
+            <div id="waveBanner"><h2 id="waveTitle">WAVE 1</h2><p id="waveBrief">HOSTILES INBOUND</p></div>
+            <div class="weapon-indicator" id="weaponIndicator">
+                <div id="weaponName">CANNON</div>
+                <div id="weaponStatus">READY</div>
+                <div class="meter"><span id="heatBar"></span></div>
+            </div>
+            <div class="damage-indicator" id="damage-top"></div>
+            <div class="damage-indicator" id="damage-bottom"></div>
+            <div class="damage-indicator" id="damage-left"></div>
+            <div class="damage-indicator" id="damage-right"></div>
+            <div id="glitchOverlay"></div>
+            <div class="ui-overlay">
+                <div><strong>PLAYER_STATS:</strong></div>
+                <div>HP: <span id="playerHP">100</span>/<span id="playerMaxHP">100</span></div>
+                <div class="meter"><span id="hpBar"></span></div>
+                <div>POWER: <span id="playerPower">100</span>/<span id="playerMaxPower">100</span></div>
+                <div class="meter"><span id="powerBar"></span></div>
+                <div>ARMOR: <span id="playerArmor">25</span></div>
+                <div style="margin-top: 10px;"><strong>INVENTORY:</strong></div>
+                <div>POWER PACKS: <span id="storedPacks">0</span> / 3</div>
+                <div style="margin-top: 10px;"><strong>SYSTEM CORES:</strong></div>
+                <div>HEALTH CORE: <span id="healthShards">0</span></div>
+                <div>POWER CORE: <span id="powerShards">0/20</span></div>
+                <div style="margin-top: 10px;"><strong>OBJECTIVE:</strong></div>
+                <div id="objectiveText">ELIMINATE HOSTILES</div><div>ENEMIES: <span id="enemiesLeft">0</span></div>
+                <div style="margin-top: 10px;"><strong>THREATS:</strong></div>
+                <div id="enemyBreakdown"></div>
+                <div style="margin-top: 10px;"><strong>STATUS:</strong></div>
+                <div id="gameStatus">ONLINE</div>
+                <canvas id="radar" width="180" height="180" aria-label="Threat radar"></canvas>
+            </div>
+            <div class="controls-help">
+                <div><strong>CONTROLS:</strong></div>
+                <div>W/S - FWD/BCK</div>
+                <div>A/D - ROTATE</div>
+                <div>MOUSE - AIM</div>
+                <div>LMB - FIRE CANNON</div>
+                <div>RMB - FIRE MG</div>
+                <div>R - USE POWER PACK</div>
+                <div>ESC - PAUSE / SETTINGS</div>
+            </div>
+            <div class="modal" id="pauseOverlay">
+                <div class="panel"><h2>COMMAND LINK PAUSED</h2><p>Pointer lock was released. Resume when ready or tune your control system.</p>
+                    <div class="setting"><label for="sensitivity">LOOK SENSITIVITY</label><input id="sensitivity" type="range" min="0.03" max="0.3" step="0.01" value="0.1"><output id="sensitivityValue">0.10</output></div>
+                    <div class="setting"><label for="volume">MASTER VOLUME</label><input id="volume" type="range" min="0" max="1" step="0.05" value="0.7"><output id="volumeValue">70%</output></div>
+                    <div class="setting"><label for="quality">RENDER QUALITY</label><select id="quality"><option value="high">HIGH</option><option value="medium">MEDIUM</option><option value="low">LOW</option></select><span></span></div>
+                    <div class="setting"><label for="invertAim">INVERT VERTICAL AIM</label><input id="invertAim" type="checkbox"><span></span></div>
+                    <div class="menu-actions"><button class="cyber-button" id="resumeButton">RESUME MISSION</button></div>
+                </div>
+            </div>
+            <div class="modal" id="upgradeScreen"><div class="panel"><h2>CORE RECOMPILATION</h2><p>Wave secured. Select one permanent system enhancement.</p><div class="upgrade-grid" id="upgradeChoices"></div></div></div>
+        </div>
+        <div class="loading" id="loadingScreen">
+            <div class="pulse">LOADING GRID...</div>
+        </div>
+        <div id="gameOverScreen">
+            <h1>SYSTEM FAILURE</h1>
+            <button id="restartButton">REINITIALIZE</button>
+        </div>
+    </div>
+
+    <script src="vendor/three.r128.min.js"></script>
+    <script src="src/game-config.js"></script>
+    <script src="src/audio-manager.js"></script>
+    <script src="src/cyber-commander.js"></script>
+</body>
+</html>

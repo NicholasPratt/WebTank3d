@@ -1,0 +1,88 @@
+* { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Courier New', monospace;
+            background: #000;
+            color: white;
+            overflow: hidden;
+            height: 100vh;
+        }
+        #splashPrompt {
+            position: absolute;
+            bottom: 15%;
+            left: 50%;
+            transform: translateX(-50%);
+            z-index: 1001;
+            font-size: 24px;
+            letter-spacing: 2px;
+            cursor: pointer;
+            transition: opacity 0.5s ease-out;
+        }
+        .game-container { display: flex; flex-direction: column; height: 100vh; }
+        .game-header { background: rgba(0,20,30,0.9); border-bottom: 2px solid #00ffff; padding: 10px; text-align: center; font-size: 18px; font-weight: bold; z-index: 100; letter-spacing: 2px; }
+        .game-area { flex: 1; position: relative; overflow: hidden; }
+        #gameCanvas { width: 100%; height: 100%; display: block; cursor: crosshair; }
+        .ui-overlay { position: absolute; top: 10px; left: 10px; background: rgba(0,20,30,0.8); border: 1px solid #00ffff; padding: 15px; border-radius: 0; font-size: 14px; z-index: 50; max-width: 220px; pointer-events: none; }
+        .controls-help { position: absolute; top: 10px; right: 10px; background: rgba(0,20,30,0.8); border: 1px solid #00ffff; padding: 15px; font-size: 12px; z-index: 50; max-width: 200px; pointer-events: none; }
+        .crosshair { position: absolute; top: 50%; left: 50%; width: 2px; height: 20px; background: #00ffff; transform: translate(-50%, -50%); z-index: 51; pointer-events: none; }
+        .crosshair::after { content: ''; position: absolute; top: 50%; left: 50%; width: 20px; height: 2px; background: #00ffff; transform: translate(-50%, -50%); }
+        .weapon-indicator { position: absolute; bottom: 20px; left: 50%; transform: translateX(-50%); background: rgba(0,20,30,0.8); border: 1px solid #00ffff; padding: 10px 20px; font-size: 18px; font-weight: bold; z-index: 50; pointer-events: none; text-align: center; }
+        .loading { position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%); background: #000; padding: 30px; text-align: center; z-index: 300; }
+        @keyframes pulse { 0%, 100% { opacity: 1; color: #00ffff; } 50% { opacity: 0.6; color: #ffffff; } }
+        .pulse { animation: pulse 1.5s infinite; }
+        #gameStatus { transition: color 0.5s ease-in-out; font-weight: bold; }
+        .damage-indicator {
+            position: absolute; width: 100px; height: 100px;
+            background: radial-gradient(ellipse at center, rgba(255,100,0,0) 0%, rgba(255,100,0,0.6) 100%);
+            border-radius: 50%; pointer-events: none; opacity: 0;
+            transition: opacity 0.5s ease-out; z-index: 51;
+        }
+        #damage-top { top: 10%; left: 50%; transform: translateX(-50%); }
+        #damage-bottom { bottom: 10%; left: 50%; transform: translateX(-50%); }
+        #damage-left { left: 10%; top: 50%; transform: translateY(-50%); }
+        #damage-right { right: 10%; top: 50%; transform: translateY(-50%); }
+        #gameOverScreen {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: rgba(0,0,0,0.85); color: white; display: none;
+            flex-direction: column; justify-content: center; align-items: center;
+            z-index: 400; text-align: center;
+        }
+        #gameOverScreen h1 { font-size: 48px; color: #ff4400; margin-bottom: 20px; letter-spacing: 4px; }
+        #restartButton {
+            padding: 15px 30px; font-size: 20px; font-weight: bold; color: #000;
+            background: #00ffff; border: none; cursor: pointer; transition: all 0.2s;
+        }
+        #restartButton:hover { background: #ffffff; letter-spacing: 2px; }
+        #glitchOverlay {
+            position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            background: white; opacity: 0.1; z-index: 500;
+            pointer-events: none; display: none;
+        }
+        .meter { width: 180px; height: 8px; margin: 3px 0 7px; border: 1px solid #177; background: #021018; overflow: hidden; }
+        .meter > span { display: block; height: 100%; width: 100%; transition: width .15s, background .15s; background: #00ffff; }
+        #hpBar { background: #2ecc71; } #heatBar { background: #ffff00; width: 0; }
+        #radar { display: block; width: 180px; height: 180px; margin-top: 10px; border: 1px solid #177; background: rgba(0,10,18,.85); }
+        .modal {
+            position: absolute; inset: 0; z-index: 350; display: none; align-items: center; justify-content: center;
+            background: rgba(0,4,8,.88); backdrop-filter: blur(4px); text-align: center;
+        }
+        .modal.visible { display: flex; }
+        .panel { width: min(680px, calc(100vw - 32px)); border: 1px solid #00ffff; background: #031019; padding: 28px; box-shadow: 0 0 40px rgba(0,255,255,.15); }
+        .panel h2 { color: #00ffff; letter-spacing: 4px; margin-bottom: 12px; }
+        .panel p { color: #a9dce0; margin: 8px 0 18px; line-height: 1.5; }
+        .menu-actions, .upgrade-grid { display: grid; gap: 10px; }
+        .upgrade-grid { grid-template-columns: repeat(3, 1fr); margin-top: 20px; }
+        button { font-family: inherit; }
+        .cyber-button, .upgrade-card { padding: 12px 18px; color: #00ffff; background: #061820; border: 1px solid #00ffff; cursor: pointer; }
+        .cyber-button:hover, .upgrade-card:hover, .cyber-button:focus, .upgrade-card:focus { color: #001014; background: #00ffff; outline: none; }
+        .upgrade-card { min-height: 145px; text-align: left; }
+        .upgrade-card strong { display: block; margin-bottom: 8px; color: #fff; }
+        .setting { display: grid; grid-template-columns: 1fr 2fr auto; align-items: center; gap: 12px; margin: 12px 0; text-align: left; }
+        #waveBanner { position: absolute; top: 22%; left: 50%; z-index: 120; transform: translate(-50%,-50%); opacity: 0; pointer-events: none; text-align: center; transition: opacity .25s; text-shadow: 0 0 18px #00ffff; }
+        #waveBanner.visible { opacity: 1; } #waveBanner h2 { font-size: clamp(26px,5vw,58px); letter-spacing: 8px; }
+        #waveBanner p { color: #8ff; margin-top: 8px; }
+        #bossBarWrap { position: absolute; top: 58px; left: 50%; transform: translateX(-50%); width: min(520px,60vw); z-index: 60; display: none; text-align: center; color: #ff8800; }
+        #bossBarWrap .meter { width: 100%; height: 12px; } #bossBar { background: #ff4400; }
+        #scoreDisplay { position: absolute; top: 10px; left: 50%; transform: translateX(-50%); z-index: 55; color: #8ff; pointer-events: none; }
+        .hit-marker { position:absolute; inset:50% auto auto 50%; width:22px; height:22px; transform:translate(-50%,-50%) rotate(45deg); opacity:0; z-index:54; pointer-events:none; border:2px solid #fff; border-left:0; border-top:0; }
+        .hit-marker.show { animation: hitmark .14s ease-out; } @keyframes hitmark { from { opacity:1; transform:translate(-50%,-50%) rotate(45deg) scale(.5); } to { opacity:0; transform:translate(-50%,-50%) rotate(45deg) scale(1.2); } }
+        @media (max-width: 760px) { .controls-help { display:none; } .ui-overlay { padding:8px; font-size:11px; max-width:155px; } #radar { width:135px; height:135px; } .meter { width:135px; } .upgrade-grid { grid-template-columns:1fr; } }
