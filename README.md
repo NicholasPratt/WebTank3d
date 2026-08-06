@@ -1,6 +1,6 @@
 # Cyber Commander
 
-Open `tank.html` in a modern desktop browser and click the game to capture the pointer. All runtime assets are stored locally, so the game works without an internet connection.
+Play online at [nicholaspratt.github.io/WebTank3d](https://nicholaspratt.github.io/WebTank3d/), or open `tank.html` in a modern desktop browser. Click the game to capture the pointer. All runtime assets are stored locally, so the game also works without an internet connection.
 
 ## Controls
 
@@ -18,6 +18,7 @@ Append `?debug=1` to expose the `N` wave-skip key. Append `?sandbox=1` for a fix
 
 ## Structure
 
+- `index.html`: GitHub Pages entry point
 - `tank.html`: accessible page structure and overlays
 - `tank.css`: presentation and responsive HUD
 - `src/game-config.js`: central balance configuration
@@ -36,3 +37,5 @@ node --check src/cyber-commander.js
 ```
 
 For a browser smoke test, open `tank.html?sandbox=1&autostart=1` and confirm that the HUD reports four threats.
+
+Every push to `main` deploys the site through GitHub Pages.
